@@ -44,3 +44,20 @@ exports.search = function(req, res, next) {
 		}).catch(function (error) { next(error); });
 	}
 };
+
+// GET /quizes/new
+exports.new = function(req, res) {
+	var quiz = models.Quiz.build(  //crea objeto quiz
+		{ pregunta: "Pregunta", respuesta: "Respuesta" }	
+	);
+	res.render('quizes/new.ejs', { quiz: quiz });
+};
+
+// POST /quizes/create
+exports.create = function(req, res) {
+	var quiz = models.Quiz.build(req.body.quiz);
+	// guarda en la DB los campos pregunta y respuesta de quiz
+	quiz.save({fields: ["pregunta", "respuesta"]}).then(function() {
+		res.redirect('/quizes');
+	})  // Redirección HTTP (URL relativo) a la lista de preguntas
+};
