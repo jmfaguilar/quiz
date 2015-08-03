@@ -30,3 +30,17 @@ exports.answer = function(req, res) {
 	}
 	res.render('quizes/answer.ejs', { quiz: req.quiz, respuesta: resultado });
 };
+
+// GET /quizes/search
+exports.search = function(req, res, next) {
+	if (req.query.search) {
+		var busqueda  = req.query.search.replace(" ", "%");
+		models.Quiz.findAll({ where:["pregunta like ?", '%'+busqueda+'%'], order:'pregunta ASC' })
+		.then(function (quizes) { res.render('quizes/search.ejs', { quizes: quizes }); })
+		.catch(function (error) { next(error); });
+	} else {
+		models.Quiz.findAll().then(function (quizes){
+			res.render('quizes/index.ejs', { quizes: quizes });
+		}).catch(function (error) { next(error); });
+	}
+};
