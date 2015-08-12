@@ -26,14 +26,15 @@ router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
 
 router.get('/quizes/search', quizController.search);
 
-router.get('/quizes/new', quizController.new);
-router.post('/quizes/create', quizController.create);
+router.get('/quizes/new', sessionController.loginRequired, quizController.new);
+router.post('/quizes/create', sessionController.loginRequired, quizController.create);
 
-router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
-router.put('/quizes/:quizId(\\d+)', quizController.update);
+router.get('/quizes/:quizId(\\d+)/edit', sessionController.loginRequired, quizController.edit);
+router.put('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.update);
 
-router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
+router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.destroy);
 
+// Definición de rutas de comentarios
 router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments', commentController.create);
 
