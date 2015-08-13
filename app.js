@@ -39,14 +39,13 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 // Middleware para el control del tiempo de la sesion
 app.use(function(req, res, next){
-    var minutes = (new Date.getTime().getMinutes()) - req.session.user.lastAccessTime.getMinutes();
     if (req.session.user) { // si el usuario esta logeado
-            if (minutes > 2) { // si el tiempo de inactividad excede los 2 mins
-                delete req.session.user;  //borra la sesion de usuario
-                res.redirect('/login'); //solicita nuevo login
+            var minutes = new Date().getTime() - req.session.user.lastAccessTime;
+            if (minutes > (2 * 60 * 1000)) { // si el tiempo de inactividad excede los 2 mins en milisegundos
+                delete req.session.user;  // borra la sesión de usuario
+                res.redirect('/login'); // solicita nuevo login
             } else { 
                 req.session.user.lastAccessTime = new Date().getTime(); // actualiza tiempo del último acceso
             } 
